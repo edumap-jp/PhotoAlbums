@@ -85,7 +85,10 @@ $srcPrefix = $this->Html->url(
 						if ($frameSetting['PhotoAlbumFrameSetting']['display_type'] == PhotoAlbumFrameSetting::DISPLAY_TYPE_SLIDE &&
 							isset($frameSetting['PhotoAlbumFrameSetting']['slide_height'])
 						) {
-							echo 'height:' . $frameSetting['PhotoAlbumFrameSetting']['slide_height'] . 'px';
+							// echo 'height:' . $frameSetting['PhotoAlbumFrameSetting']['slide_height'] . 'px';
+							echo 'max-height:' . $frameSetting['PhotoAlbumFrameSetting']['slide_height'] . 'px;';
+							list($width, $height) = getimagesize( WWW_ROOT . $photo['UploadFile']['photo']['path'] . $photo['UploadFile']['photo']['id'] . DS . $photo['UploadFile']['photo']['real_file_name']);
+							echo 'padding-top:' . ($height / $width * 100) . '%;';
 						}
 					?>
 				"
