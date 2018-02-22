@@ -226,3 +226,5 @@ msgstr ""
 msgid "Change displayed alubum on %s"
 msgstr ""
 
+msgid "'0' for default setting."
+msgstr ""

@@ -61,6 +61,7 @@
 							'div' => 'form-inline',
 							'min' => 10,
 							'max' => 10000,
+							'help' => __d('photo_albums', '\'0\' for default setting.'),
 							'ng-disabled' => 'FrameSettingController.checkDisplayTypeSlide == false',
 						)
 					);
