@@ -226,7 +226,7 @@
 	left: 10%;
 }
 .photo-albums-slide-photo {
-	height: 400px;
+	/*height: 400px;*/
 	width: 100%;
 	background-repeat: no-repeat;
 	background-position: center center;
@@ -285,6 +285,14 @@
 }
 .modal-content .carousel-indicators li > img {
 	display: block;
+}
+/* スライダー（carousel）の両側の影を消す */
+.carousel-control.right,
+.carousel-control.left{
+	background-image: -webkit-linear-gradient(left,rgba(0,0,0,.0001) 0,rgba(0,0,0,0) 100%);
+	background-image: -o-linear-gradient(left,rgba(0,0,0,.0001) 0,rgba(0,0,0,0) 100%);
+	background-image: -webkit-gradient(linear,left top,right top,from(rgba(0,0,0,0)),to(rgba(0,0,0,.5)));
+	background-image: linear-gradient(to right,rgba(0,0,0,.0001) 0,rgba(0,0,0,0) 100%);
 }
 
 .photo-albums-slide-modal-close {
