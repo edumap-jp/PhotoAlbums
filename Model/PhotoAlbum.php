@@ -58,7 +58,7 @@ class PhotoAlbum extends PhotoAlbumsAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		$this->validate = Hash::merge(
+		$this->validate = array_merge(
 			$this->validate,
 			array(
 				'name' => array(
@@ -87,6 +87,10 @@ class PhotoAlbum extends PhotoAlbumsAppModel {
  * @return mixed Result of the find operation
  * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#afterfind
  * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ *
+ * 速度改善の修正に伴って発生したため抑制
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 	public function afterFind($results, $primary = false) {
 		if ($this->recursive == -1) {
@@ -99,12 +103,15 @@ class PhotoAlbum extends PhotoAlbumsAppModel {
 		if (!isset($results[0][$this->alias]['key'])) {
 			return $results;
 		}
-
+		$albumKeyArr = [];
+		foreach ($results as $result) {
+			$albumKeyArr[] = $result['PhotoAlbum']['key'];
+		}
 		$Photo = ClassRegistry::init('PhotoAlbums.PhotoAlbumPhoto');
 		$Photo->virtualFields = array('photo_count' => 0);
 		$query = array(
 			'conditions' => $Photo->getWorkflowConditions() + array(
-				'PhotoAlbumPhoto.album_key' => Hash::extract($results, '{n}.PhotoAlbum.key')
+				'PhotoAlbumPhoto.album_key' => $albumKeyArr
 			),
 			'fields' => array(
 				'PhotoAlbumPhoto.album_key',
@@ -117,38 +124,34 @@ class PhotoAlbum extends PhotoAlbumsAppModel {
 				'PhotoAlbumPhoto.status',
 			),
 		);
-		// ＴＯＤＯ listでいける？
-		$photoCount = $Photo->find('all', $query);
-		$photoCount = Hash::combine(
-			$photoCount,
-			'{n}.PhotoAlbumPhoto.status',
-			'{n}.PhotoAlbumPhoto.photo_count',
-			'{n}.PhotoAlbumPhoto.album_key'
-		);
+		$countArr = $Photo->find('all', $query);
+		$photoCount = [];
+		foreach ($countArr as $result) {
+			$result = $result['PhotoAlbumPhoto'];
+			$photoCount[$result['album_key']] = [
+				$result['status'] => $result['photo_count']
+			];
+		}
 
 		foreach ($results as $index => $result) {
 			$albumKey = $result[$this->alias]['key'];
 
-			$publishedCount = Hash::get(
-				$photoCount,
-				[$albumKey, WorkflowComponent::STATUS_PUBLISHED],
-				0
-			);
-			$pendingCount = Hash::get(
-				$photoCount,
-				[$albumKey, WorkflowComponent::STATUS_APPROVAL_WAITING],
-				0
-			);
-			$draftCount = Hash::get(
-				$photoCount,
-				[$albumKey, WorkflowComponent::STATUS_IN_DRAFT],
-				0
-			);
-			$disapprovedCount = Hash::get(
-				$photoCount,
-				[$albumKey, WorkflowComponent::STATUS_DISAPPROVED],
-				0
-			);
+			$publishedCount = 0;
+			$pendingCount = 0;
+			$draftCount = 0;
+			$disapprovedCount = 0;
+			if (isset($photoCount[$albumKey][WorkflowComponent::STATUS_PUBLISHED])) {
+				$publishedCount = $photoCount[$albumKey][WorkflowComponent::STATUS_PUBLISHED];
+			}
+			if (isset($photoCount[$albumKey][WorkflowComponent::STATUS_APPROVAL_WAITING])) {
+				$pendingCount = $photoCount[$albumKey][WorkflowComponent::STATUS_APPROVAL_WAITING];
+			}
+			if (isset($photoCount[$albumKey][WorkflowComponent::STATUS_IN_DRAFT])) {
+				$draftCount = $photoCount[$albumKey][WorkflowComponent::STATUS_IN_DRAFT];
+			}
+			if (isset($photoCount[$albumKey][WorkflowComponent::STATUS_DISAPPROVED])) {
+				$disapprovedCount = $photoCount[$albumKey][WorkflowComponent::STATUS_DISAPPROVED];
+			}
 			$results[$index][$this->alias] += array(
 				'published_photo_count' => $publishedCount,
 				'pending_photo_count' => $pendingCount,

@@ -36,7 +36,7 @@ class PhotoAlbumDisplayAlbum extends PhotoAlbumsAppModel {
 		);
 		$list = $Album->find('list', $query);
 
-		$this->validate = Hash::merge($this->validate, array(
+		$this->validate = array_merge($this->validate, array(
 			'album_key' => array(
 				'inList' => array(
 					'rule' => array('inList', $list),
