@@ -247,10 +247,15 @@ class PhotoAlbumPhotosController extends PhotoAlbumsAppController {
 			return;
 		}
 
+		$photoIdArr = [];
+		foreach ($this->request->data['PhotoAlbumPhoto'] as $item) {
+			$photoIdArr[] = $item['id'];
+		}
+
 		$query = array(
 			'conditions' => array(
 				'PhotoAlbumPhoto.album_key' => $this->request->params['key'],
-				'PhotoAlbumPhoto.id' => Hash::extract($this->request->data, 'PhotoAlbumPhoto.{n}.id')
+				'PhotoAlbumPhoto.id' => $photoIdArr
 			),
 			'recursive' => -1,
 			//'callbacks' => 'before',
