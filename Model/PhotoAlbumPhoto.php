@@ -68,7 +68,8 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 			);
 		}
 
-		if (strlen(Hash::get($this->data, 'PhotoAlbumPhoto.' . $field . '.name'))) {
+		if (isset($this->data['PhotoAlbumPhoto'][$field]['name']) &&
+			strlen($this->data['PhotoAlbumPhoto'][$field]['name'])) {
 			$validate['photoExtension'] = array(
 				'rule' => array(
 					'extension',
@@ -85,7 +86,7 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 			*/
 		}
 
-		$this->validate = Hash::merge(
+		$this->validate = array_merge(
 			$this->validate,
 			array(
 				$field => $validate
