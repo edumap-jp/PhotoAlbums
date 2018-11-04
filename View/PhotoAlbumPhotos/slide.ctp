@@ -88,7 +88,7 @@ $srcPrefix = $this->Html->url(
 							if ($frameSetting['PhotoAlbumFrameSetting']['slide_height'] >= 1) {
 								echo 'height:' . $frameSetting['PhotoAlbumFrameSetting']['slide_height'] . 'px';
 							} else {
-								list($width, $height) = getimagesize( WWW_ROOT . $photo['UploadFile']['photo']['path'] . $photo['UploadFile']['photo']['id'] . DS . $photo['UploadFile']['photo']['real_file_name']);
+								list($width, $height) = getimagesize( UPLOADS_ROOT . $photo['UploadFile']['photo']['path'] . $photo['UploadFile']['photo']['id'] . DS . $photo['UploadFile']['photo']['real_file_name']);
 								echo 'padding-top:' . ($height / $width * 100) . '%;';
 							}
 						}
