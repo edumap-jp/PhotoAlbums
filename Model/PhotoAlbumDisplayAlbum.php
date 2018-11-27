@@ -49,20 +49,20 @@ class PhotoAlbumDisplayAlbum extends PhotoAlbumsAppModel {
 		return parent::beforeValidate($options);
 	}
 
-	///**
-	// * Get display album key list
-	// *
-	// * @return display album key list
-	// */
-	//	public function getDisplayList() {
-	//		$query = array(
-	//			'fields' => array('PhotoAlbumDisplayAlbum.album_key'),
-	//			'conditions' => array(
-	//				'frame_key' => Current::read('Frame.key')
-	//			),
-	//			'recursive' => -1
-	//		);
-	//
-	//		return $this->find('list', $query);
-	//	}
+/**
+ * Get display album key list
+ *
+ * @return display album key list
+ */
+	public function getDisplayList() {
+		$query = array(
+			'fields' => array('PhotoAlbumDisplayAlbum.album_key'),
+			'conditions' => array(
+				'frame_key' => Current::read('Frame.key')
+			),
+			'recursive' => -1
+		);
+
+		return $this->find('list', $query);
+	}
 }

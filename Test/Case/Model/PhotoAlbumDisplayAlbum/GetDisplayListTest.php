@@ -53,13 +53,13 @@ class PhotoAlbumGetDisplayListTest extends NetCommonsModelTestCase {
  * @return void
  */
 	public function testGetDisplayList() {
-		//		$currentValue['Frame']['key'] = 'Lorem ipsum dolor sit amet';
-		//		PhotoAlbumTestCurrentUtility::setValue($currentValue);
-		//
-		//		$expected[1] = 'Lorem ipsum dolor sit amet';
-		//		$actual = $this->PhotoAlbumDisplayAlbum->getDisplayList();
-		//
-		//		$this->assertEquals($expected, $actual);
-		//		PhotoAlbumTestCurrentUtility::setOriginValue();
+		$currentValue['Frame']['key'] = 'Lorem ipsum dolor sit amet';
+		PhotoAlbumTestCurrentUtility::setValue($currentValue);
+
+		$expected[1] = 'Lorem ipsum dolor sit amet';
+		$actual = $this->PhotoAlbumDisplayAlbum->getDisplayList();
+
+		$this->assertEquals($expected, $actual);
+		PhotoAlbumTestCurrentUtility::setOriginValue();
 	}
 }
