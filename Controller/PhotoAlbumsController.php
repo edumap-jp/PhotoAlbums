@@ -90,11 +90,14 @@ class PhotoAlbumsController extends PhotoAlbumsAppController {
 		$frameSetting = $this->PhotoAlbumFrameSetting->getFrameSetting();
 		$this->set('frameSetting', $frameSetting);
 
-		$displayAlbum = $this->PhotoAlbumDisplayAlbum->getDisplayList();
+		// PhotoAlbumDisplayAlbumはフレームキー毎にアルバムを管理している。
+		// 本来アルバムはルーム単位で管理するもののため、PhotoAlbumDisplayAlbumは利用しない。
+		// ここ以外でPhotoAlbumDisplayAlbum->getDisplayList()は利用されていない。
+		//$displayAlbum = $this->PhotoAlbumDisplayAlbum->getDisplayList();
 
 		$conditions = $this->PhotoAlbum->getWorkflowConditions();
 		$conditions['PhotoAlbum.block_id'] = Current::read('Block.id');
-		$conditions['PhotoAlbum.key'] = $displayAlbum;
+		//$conditions['PhotoAlbum.key'] = $displayAlbum;
 
 		$this->Paginator->settings = array(
 			'PhotoAlbum' => array(
