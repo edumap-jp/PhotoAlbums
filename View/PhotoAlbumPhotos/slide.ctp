@@ -89,7 +89,7 @@ $srcPrefix = $this->Html->url(
 							if ($frameSetting['PhotoAlbumFrameSetting']['slide_height'] >= 1) {
 								echo 'height:' . $frameSetting['PhotoAlbumFrameSetting']['slide_height'] . 'px; background-size:contain;';
 							} else {
-								if ( empty( $height ) ) {
+								if (empty($height)) {
 									list($width, $height) = getimagesize( UPLOADS_ROOT . $photo['UploadFile']['photo']['path'] . $photo['UploadFile']['photo']['id'] . DS . $photo['UploadFile']['photo']['real_file_name']);
 								}
 								echo 'padding-top:' . ($height / $width * 100) . '%; background-size:contain;';
