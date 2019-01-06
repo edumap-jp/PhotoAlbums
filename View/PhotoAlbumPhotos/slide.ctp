@@ -54,6 +54,7 @@ $srcPrefix = $this->Html->url(
 	<?php endif; ?>
 >
 	<!-- Wrapper for slides -->
+	<?php $height = 0; ?>
 	<?php foreach ($photos as $index => $photo) : ?>
 		<div uib-slide
 			index="<?php echo $index ?>"
@@ -86,10 +87,12 @@ $srcPrefix = $this->Html->url(
 							isset($frameSetting['PhotoAlbumFrameSetting']['slide_height'])
 						) {
 							if ($frameSetting['PhotoAlbumFrameSetting']['slide_height'] >= 1) {
-								echo 'height:' . $frameSetting['PhotoAlbumFrameSetting']['slide_height'] . 'px';
+								echo 'height:' . $frameSetting['PhotoAlbumFrameSetting']['slide_height'] . 'px; background-size:contain;';
 							} else {
-								list($width, $height) = getimagesize( UPLOADS_ROOT . $photo['UploadFile']['photo']['path'] . $photo['UploadFile']['photo']['id'] . DS . $photo['UploadFile']['photo']['real_file_name']);
-								echo 'padding-top:' . ($height / $width * 100) . '%;';
+								if (empty($height)) {
+									list($width, $height) = getimagesize( UPLOADS_ROOT . $photo['UploadFile']['photo']['path'] . $photo['UploadFile']['photo']['id'] . DS . $photo['UploadFile']['photo']['real_file_name']);
+								}
+								echo 'padding-top:' . ($height / $width * 100) . '%; background-size:contain;';
 							}
 						}
 					?>
