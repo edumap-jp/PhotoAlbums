@@ -15,6 +15,8 @@ App::uses('NetCommonsCakeTestCase', 'NetCommons.TestSuite');
 
 /**
  * Summary for PhotoAlbumPhotoPublish Test Case
+ *
+ * @property PhotoAlbumPhoto $PhotoAlbumPhoto
  */
 class PhotoAlbumPhotoPublishTest extends NetCommonsCakeTestCase {
 
@@ -29,8 +31,9 @@ class PhotoAlbumPhotoPublishTest extends NetCommonsCakeTestCase {
 		'plugin.users.user',
 		'plugin.workflow.workflow_comment',
 	);
+	private $originPermission;
 
-/**
+	/**
  * setUp method
  *
  * @return void
@@ -59,15 +62,19 @@ class PhotoAlbumPhotoPublishTest extends NetCommonsCakeTestCase {
  * @return void
  */
 	public function testPublish() {
-		$currentValue['Permission']['content_publishable']['value'] = true;
-		PhotoAlbumTestCurrentUtility::setValue($currentValue);
+		//$currentValue['Permission']['content_publishable']['value'] = true;
+		//PhotoAlbumTestCurrentUtility::setValue($currentValue);
+
+		$this->__permissionPublishable();
 
 		$data['PhotoAlbumPhoto']['id'] = 1;
 		$data['PhotoAlbumPhoto']['language_id'] = 1;
 		$actual = $this->PhotoAlbumPhoto->publish([$data]);
 		$this->assertTrue($actual);
 
-		PhotoAlbumTestCurrentUtility::setOriginValue();
+		//PhotoAlbumTestCurrentUtility::setOriginValue();
+
+		$this->__restorePermission();
 	}
 
 /**
@@ -94,15 +101,36 @@ class PhotoAlbumPhotoPublishTest extends NetCommonsCakeTestCase {
 			->method('save')
 			->will($this->returnValue(false));
 
-		$currentValue['Permission']['content_publishable']['value'] = true;
-		PhotoAlbumTestCurrentUtility::setValue($currentValue);
+		//$currentValue['Permission']['content_publishable']['value'] = true;
+		//PhotoAlbumTestCurrentUtility::setValue($currentValue);
+		$this->__permissionPublishable();
 
 		$this->setExpectedException('InternalErrorException');
 		$data['PhotoAlbumPhoto']['id'] = 1;
 		$data['PhotoAlbumPhoto']['language_id'] = 1;
 		$MockPhotoAlbumPhoto->publish([$data]);
 
-		PhotoAlbumTestCurrentUtility::setOriginValue();
+		//PhotoAlbumTestCurrentUtility::setOriginValue();
+		$this->__restorePermission();
+	}
+
+/**
+ * __permissionPublishable
+ *
+ * @return void
+ */
+	private function __permissionPublishable() {
+		$this->originPermission = Current::permission('content_publishable');
+		Current::writePermission(null, 'content_publishable', true);
+	}
+
+/**
+ * __restorePermission
+ *
+ * @return void
+ */
+	private function __restorePermission() {
+		Current::writePermission(null, 'content_publishable', $this->originPermission);
 	}
 
 }
