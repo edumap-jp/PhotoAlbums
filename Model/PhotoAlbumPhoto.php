@@ -286,6 +286,10 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 		}
 
 		foreach ($files as $file) {
+			// MacでZIPしたときにできるフォルダのファイルは無視させる
+			if (strpos($file, '/__MACOSX/') !== false) {
+				continue;
+			}
 			$file = new File($file);
 			$data['PhotoAlbumPhoto']['photo'] = array_merge(
 				$data['PhotoAlbumPhoto']['photo'],
