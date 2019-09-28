@@ -154,7 +154,6 @@ class PhotoAlbumPhotosController extends PhotoAlbumsAppController {
  * @return void
  */
 	public function add() {
-		$this->layout = 'NetCommons.modal';
 		$this->view = 'edit';
 
 		$photo = $this->PhotoAlbumPhoto->create();
@@ -179,6 +178,7 @@ class PhotoAlbumPhotosController extends PhotoAlbumsAppController {
 			}
 			$this->NetCommons->handleValidationError($this->PhotoAlbumPhoto->validationErrors);
 		} else {
+			$this->layout = 'NetCommons.modal';
 			$this->request->data = $photo;
 			$this->request->data['PhotoAlbumPhoto']['album_key'] = $this->request->params['key'];
 		}
