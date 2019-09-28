@@ -1,4 +1,4 @@
-<?php /** @noinspection ALL */
+<?php
 /**
  * PhotoAlbumPhoto Model
  *
@@ -36,12 +36,18 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 		'Files.Attachment' => [
 			PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME => [
 				'thumbnailSizes' => array(
+					'origin' => '800ml',
 					'big' => '800ml',
 					'medium' => '400ml',
 					'small' => '152mh',
 					//'small' => '200ml',
 					'thumb' => '80x80',
 				),
+			]
+		],
+		'PhotoAlbums.OriginImageResize' => [
+			PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME => [
+				'resizeImagePrefix' => 'origin',
 			]
 		],
 		'Workflow.Workflow',
