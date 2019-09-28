@@ -285,6 +285,10 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 		$files = $dir->findRecursive('.*\.(jpg|jpeg|gif|png|bmp)');
 		$files = $this->__excludeHiddenFile($files);
 
+		if (!$files) {
+			$this->invalidate('photo', __d('photo_albums', 'Select photo.'));
+		}
+
 		$regenerateData = [];
 		foreach ($files as $file) {
 			$file = new File($file);
