@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection ALL */
 /**
  * PhotoAlbumPhoto Model
  *
@@ -33,6 +33,7 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
  */
 	public $actsAs = array(
 		'NetCommons.OriginalKey',
+		// TODO サムネイルにあわせてsmallのサイズをきめる。
 		'Files.Attachment' => [PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME],
 		'Workflow.Workflow',
 		'Workflow.WorkflowComment',
@@ -73,7 +74,7 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 			$validate['photoExtension'] = array(
 				'rule' => array(
 					'extension',
-					array('gif', 'jpeg', 'png', 'jpg', 'zip')
+					array('gif', 'jpeg', 'png', 'jpg', 'zip', 'bmp')
 				),
 				'message' => array(__d('files', 'It is upload disabled file format'))
 			);
@@ -272,24 +273,20 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
  * @throws InternalErrorException
  */
 	private function __regenerateDataForZip($data) {
-		$files = array();
 		$zipType = ['application/zip', 'application/x-zip-compressed'];
-		if (in_array($data['PhotoAlbumPhoto']['photo']['type'], $zipType)) {
-			$zip = new UnZip($data['PhotoAlbumPhoto']['photo']['tmp_name']);
-			$unzipedFolder = $zip->extract();
-			$dir = new Folder($unzipedFolder->path);
-			$files = $dir->findRecursive('.*\.(jpg|jpeg)');
-		}
-
-		if (!$files) {
+		if (in_array($data['PhotoAlbumPhoto']['photo']['type'], $zipType) === false) {
 			return array($data);
-		}
 
+		}
+		// ZIP 処理
+		$zip = new UnZip($data['PhotoAlbumPhoto']['photo']['tmp_name']);
+		$unzipedFolder = $zip->extract();
+		$dir = new Folder($unzipedFolder->path);
+		$files = $dir->findRecursive('.*\.(jpg|jpeg|gif|png|bmp)');
+		$files = $this->__excludeHiddenFile($files);
+
+		$regenerateData = [];
 		foreach ($files as $file) {
-			// MacでZIPしたときにできるフォルダのファイルは無視させる
-			if (strpos($file, '/__MACOSX/') !== false) {
-				continue;
-			}
 			$file = new File($file);
 			$data['PhotoAlbumPhoto']['photo'] = array_merge(
 				$data['PhotoAlbumPhoto']['photo'],
@@ -306,4 +303,21 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 		return $regenerateData;
 	}
 
+/**
+ * 隠しファイル除外
+ *
+ * @param array $files
+ * @return array
+ */
+	private function __excludeHiddenFile(array $files) {
+		$excludedFiles = [];
+		foreach ($files as $file) {
+			// "."はじまりのファイル（隠しファイル）は除外
+			if (substr(basename($file), 0, 1) === '.') {
+				continue;
+			}
+			$excludedFiles[] = $file;
+		}
+		return $excludedFiles;
+	}
 }
