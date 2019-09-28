@@ -33,8 +33,17 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
  */
 	public $actsAs = array(
 		'NetCommons.OriginalKey',
-		// TODO サムネイルにあわせてsmallのサイズをきめる。
-		'Files.Attachment' => [PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME],
+		'Files.Attachment' => [
+			PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME => [
+				'thumbnailSizes' => array(
+					'big' => '800ml',
+					'medium' => '400ml',
+					'small' => '152mh',
+					//'small' => '200ml',
+					'thumb' => '80x80',
+				),
+			]
+		],
 		'Workflow.Workflow',
 		'Workflow.WorkflowComment',
 		//多言語
