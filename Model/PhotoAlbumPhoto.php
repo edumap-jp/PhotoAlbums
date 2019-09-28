@@ -47,7 +47,7 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 		],
 		'PhotoAlbums.OriginImageResize' => [
 			PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME => [
-				'resizeImagePrefix' => 'origin',
+				'resizeImageSizeKey' => 'origin',
 			]
 		],
 		'Workflow.Workflow',
