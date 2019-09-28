@@ -87,6 +87,47 @@ class PhotoAlbumsImageHelper extends AppHelper {
 	}
 
 /**
+ * is_active: trueだったらinlineイメージにして、is_active:falseならURLをかえす
+ *
+ * @param array $data PhotoAlbumAlbumPhoto data
+ * @param string $size thumb, small, medium, big
+ * @return string
+ */
+	public function inlinePhotoIfActiveOtherwisePhotoUrl($data, $size = null) {
+		if ($data['PhotoAlbumPhoto']['is_active']) {
+			return $this->__inlinePhoto($data, $size);
+		}
+		return $this->photoUrl($data, $size);
+	}
+
+/**
+ * インライン画像
+ *
+ * @param array $data PhotoAlbumAlbumPhoto data
+ * @param string $size thumb, small, medium, big
+ * @return string
+ */
+	private function __inlinePhoto($data, $size = null) {
+		/** @var UploadFile $uploadFile */
+		$uploadFile = ClassRegistry::init("Files.UploadFile");
+		$file = $uploadFile->getFile(
+			'photo_albums',
+			$data['PhotoAlbumPhoto']['id'],
+			PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME
+		);
+		if (!$file) {
+			return '';
+		}
+		$filepath = UPLOADS_ROOT . $file['UploadFile']['path'] . DS . $file['UploadFile']['id'] .DS . $size . '_' . $file['UploadFile']['real_file_name'];
+		if (file_exists($filepath) === false) {
+			return '';
+		}
+		$mimeType = $file['UploadFile']['mimetype'];
+		$encodeData = base64_encode(file_get_contents($filepath));
+		return sprintf('data:%s;base64,%s', $mimeType, $encodeData);
+	}
+
+/**
  * Creates photo image url array
  *
  * @param array $data PhotoAlbumAlbumPhoto data

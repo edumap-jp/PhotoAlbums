@@ -118,7 +118,11 @@
 						?>
 					')">
 
-						<div class="photo-albums-photo" style="background-image:url(<?php echo $this->PhotoAlbumsImage->photoUrl($photo, 'medium'); ?>);"></div>
+						<div class="photo-albums-photo" style="background-image:url(<?php
+						echo $this->PhotoAlbumsImage->inlinePhotoIfActiveOtherwisePhotoUrl($photo, 'small');
+						//echo $this->PhotoAlbumsImage->inlinePhoto($photo, 'thumb');
+						//echo $this->PhotoAlbumsImage->photoUrl($photo, 'small');
+						?>);"></div>
 					</a>
 
 					<div class="photo-albums-photo-list-status">
