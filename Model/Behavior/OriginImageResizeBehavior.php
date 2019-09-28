@@ -26,6 +26,9 @@ final class OriginImageResizeBehavior extends ModelBehavior {
 		$this->__guradBeforeLoadingAttachmentBehavior($model);
 
 		$this->settings[$model->alias] = $config;
+
+		$this->__uploadFileModel = ClassRegistry::init('Files.UploadFile');
+
 		parent::setup($model, $config);
 	}
 
@@ -39,8 +42,6 @@ final class OriginImageResizeBehavior extends ModelBehavior {
  */
 	public function afterSave(Model $model, $created, $options = array()) {
 		$setting = $this->settings[$model->alias];
-
-		$this->__uploadFileModel = ClassRegistry::init('Files.UploadFile');
 
 		foreach ($setting as $fieldName => $fieldSetting) {
 			$pluginKey = Inflector::underscore($model->plugin);
