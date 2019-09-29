@@ -40,13 +40,28 @@
 			<?php echo $this->NetCommonsForm->hidden('status'); ?>
 
 			<?php
+			if (!empty($isAdd)) {
+				$this->Form->unlockField('PhotoAlbumPhoto.' . PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME);
+				// バリデーションエラーが表示されるようにフィールド名はモデルフィールド名のままで、name属性で複数可能なフィールド指定
+				echo $this->NetCommonsForm->uploadFile(
+					'PhotoAlbumPhoto.' . PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME ,
+					array(
+						'label' => __d('photo_albums', 'Photo file'),
+						'required' => true,
+						'multiple',
+						'name' => 'data[PhotoAlbumPhoto][photo][]',
+					)
+				);
+			} else {
 				echo $this->NetCommonsForm->uploadFile(
 					PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME,
 					array(
 						'label' => __d('photo_albums', 'Photo file'),
 						'remove' => false
 					)
-				)
+				);
+			}
+
 			?>
 
 			<?php

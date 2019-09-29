@@ -155,11 +155,12 @@ class PhotoAlbumPhotosController extends PhotoAlbumsAppController {
  */
 	public function add() {
 		$this->view = 'edit';
+		$this->set('isAdd', true);
 
 		$photo = $this->PhotoAlbumPhoto->create();
 		if ($this->request->is('post')) {
 			$this->request->data['PhotoAlbumPhoto']['status'] = $this->Workflow->parseStatus();
-			if ($this->PhotoAlbumPhoto->savePhoto($this->request->data)) {
+			if ($this->PhotoAlbumPhoto->savePhotos($this->request->data)) {
 				$url = PhotoAlbumsSettingUtility::settingUrl(
 					array(
 						'plugin' => 'photo_albums',
