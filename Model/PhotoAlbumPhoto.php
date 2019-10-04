@@ -39,8 +39,9 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 					'origin' => '800ml',
 					'big' => '800ml',
 					'medium' => '400ml',
-					'small' => '152mh',
-					//'small' => '200ml',
+					//'small' => '152mh',
+					'small' => '120mh',
+					////'small' => '200ml',
 					'thumb' => '80x80',
 				),
 			]
