@@ -1,4 +1,4 @@
-<?php /** @noinspection ALL */
+<?php
 /**
  * PhotoAlbumPhoto Model
  *
@@ -16,6 +16,8 @@ App::uses('SiteSettingUtil', 'SiteManager.Utility');
 
 /**
  * Summary for PhotoAlbumPhoto Model
+ *
+ * @noinspection ALL
  */
 class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 
@@ -309,10 +311,10 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 /**
  * 隠しファイル除外
  *
- * @param array $files
+ * @param array $files ファイル
  * @return array
  */
-	private function __excludeHiddenFile(array $files) {
+	private function __excludeHiddenFile($files) {
 		$excludedFiles = [];
 		foreach ($files as $file) {
 			// "."はじまりのファイル（隠しファイル）は除外

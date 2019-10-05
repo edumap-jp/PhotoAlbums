@@ -26,12 +26,35 @@ class PhotoAlbumPhotoGetWorkflowConditionsTest extends NetCommonsCakeTestCase {
 		'plugin.photo_albums.photo_album_photo',
 	);
 
-	private $originPublishablePermission;
-	private $originEditablePermission;
-	private $originPermissions = [];
-	private $originCurrent =[];
+/**
+ * 元の公開権限データを保持するための変数
+ *
+ * @var array
+ */
+	private $__originPublishablePermission;
 
-	/**
+/**
+ * 元の編集権限データを保持するための変数
+ *
+ * @var array
+ */
+	private $__originEditablePermission;
+
+/**
+ * 元の権限データを保持するための変数
+ *
+ * @var array
+ */
+	private $__originPermissions = [];
+
+/**
+ * 元のCurrentのデータ
+ *
+ * @var array
+ */
+	private $__originCurrent = [];
+
+/**
  * setUp method
  *
  * @return void
@@ -97,7 +120,6 @@ class PhotoAlbumPhotoGetWorkflowConditionsTest extends NetCommonsCakeTestCase {
 		//PhotoAlbumTestCurrentUtility::setValue($currentValue);
 		$this->__setCurrent('Language.id', 99);
 		$this->__setCurrent('User.id', 88);
-
 
 		$expected = array (
 			array(
@@ -183,10 +205,10 @@ class PhotoAlbumPhotoGetWorkflowConditionsTest extends NetCommonsCakeTestCase {
  * @return void
  */
 	private function __restorePermission() {
-		Current::writePermission(null, 'content_publishable', $this->originPublishablePermission);
-		Current::writePermission(null, 'content_publishable', $this->originEditablePermission);
+		Current::writePermission(null, 'content_publishable', $this->__originPublishablePermission);
+		Current::writePermission(null, 'content_publishable', $this->__originEditablePermission);
 
-		foreach ($this->originPermissions as $permission => $permissionValue) {
+		foreach ($this->__originPermissions as $permission => $permissionValue) {
 			Current::writePermission(null, $permission, $permissionValue);
 		}
 	}
@@ -199,17 +221,29 @@ class PhotoAlbumPhotoGetWorkflowConditionsTest extends NetCommonsCakeTestCase {
  * @return void
  */
 	private function __setPermission($permissionKey, $allow) {
-		$this->originPermissions[$permissionKey] = Current::permission($permissionKey);
+		$this->__originPermissions[$permissionKey] = Current::permission($permissionKey);
 		Current::writePermission(null, $permissionKey, $allow);
 	}
 
+/**
+ * Currentにセットする
+ *
+ * @param string $key
+ * @param mixed $value
+ * @return void
+ */
 	private function __setCurrent($key, $value) {
-		$this->originCurrent[$key] = Current::read($key);
- 		Current::write($key, $value);
+		$this->__originCurrent[$key] = Current::read($key);
+		Current::write($key, $value);
 	}
 
+/**
+ * Currentの中身をリストアする
+ *
+ * @return void
+ */
 	private function __restoreCurrent() {
-		foreach ($this->originCurrent as $key => $value) {
+		foreach ($this->__originCurrent as $key => $value) {
 			Current::write($key, $value);
 		}
 	}
