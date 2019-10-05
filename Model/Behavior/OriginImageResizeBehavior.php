@@ -46,7 +46,9 @@ final class OriginImageResizeBehavior extends ModelBehavior {
 		foreach ($setting as $fieldName => $fieldSetting) {
 			$pluginKey = Inflector::underscore($model->plugin);
 			$uploadFile = $this->__uploadFileModel->getFile($pluginKey, $model->id, $fieldName);
-			$this->overwriteOriginFile($uploadFile, $fieldSetting['resizeImageSizeKey'] . '_');
+			if ($uploadFile) {
+				$this->overwriteOriginFile($uploadFile, $fieldSetting['resizeImageSizeKey'] . '_');
+			}
 		}
 
 		return parent::afterSave($model, $created, $options);
