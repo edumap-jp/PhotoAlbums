@@ -379,6 +379,11 @@ class PhotoAlbum extends PhotoAlbumsAppModel {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
+			if (!$this->__deleteJacketFile($data['PhotoAlbum']['key'])) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			// アルバム内の写真削除
 			$Photo = ClassRegistry::init('PhotoAlbums.PhotoAlbumPhoto');
 			$conditions = array('PhotoAlbumPhoto.album_key' => $data['PhotoAlbum']['key']);
 			$query = array(
@@ -387,7 +392,11 @@ class PhotoAlbum extends PhotoAlbumsAppModel {
 				'recursive' => -1
 			);
 			$contentKeys = $Photo->find('list', $query);
+
 			if (!$Photo->deleteAll($conditions, false)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+			if (!$Photo->deleteUploadFileByContentKeys($contentKeys)) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 
@@ -407,5 +416,15 @@ class PhotoAlbum extends PhotoAlbumsAppModel {
 		}
 
 		return true;
+	}
+
+/**
+ * __deleteJacketFile
+ *
+ * @param string $albumKey album.key
+ * @return mixed
+ */
+	private function __deleteJacketFile($albumKey) {
+		return $this->deleteUploadFileByContentKeys([$albumKey]);
 	}
 }
