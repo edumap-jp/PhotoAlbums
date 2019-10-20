@@ -11,7 +11,7 @@ App::uses('ModelBehavior', 'Model');
 final class OriginImageResizeBehavior extends ModelBehavior {
 
 /**
- * @var UploadFile
+ * @var UploadFile UploadFile model
  */
 	private $__uploadFileModel;
 
