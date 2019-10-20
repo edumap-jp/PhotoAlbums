@@ -181,12 +181,10 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 
 		$regenerateData = $this->__regenerateDataForZip($data);
 
-		$photo = array();
-
-		foreach ($regenerateData as $index => $data) {
+		foreach ($regenerateData as $datum) {
 			$this->create();
 
-			$this->set($data);
+			$this->set($datum);
 			if (!$this->validates()) {
 				$this->rollback();
 				return false;
@@ -197,16 +195,16 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 				if (! $result) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
-				$photo[] = $result;
 
 			} catch (Exception $ex) {
 				$this->rollback($ex);
+				return false;
 			}
 		}
 
 		$this->commit();
 
-		return $photo;
+		return true;
 	}
 
 /**
