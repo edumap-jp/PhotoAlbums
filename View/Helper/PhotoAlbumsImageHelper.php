@@ -118,7 +118,11 @@ class PhotoAlbumsImageHelper extends AppHelper {
 		if (!$file) {
 			return '';
 		}
-		$filepath = UPLOADS_ROOT . $file['UploadFile']['path'] . DS . $file['UploadFile']['id'] .DS . $size . '_' . $file['UploadFile']['real_file_name'];
+		$filepath = UPLOADS_ROOT .
+			$file['UploadFile']['path'] . DS .
+			$file['UploadFile']['id'] . DS .
+			$size . '_' . $file['UploadFile']['real_file_name'];
+
 		if (file_exists($filepath) === false) {
 			return '';
 		}

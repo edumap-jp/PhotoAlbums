@@ -67,7 +67,12 @@ final class OriginImageResizeBehavior extends ModelBehavior {
 		$originFilePath = $this->__uploadFileModel->getRealFilePath($uploadFile);
 
 		//  origin_resizeからprefix削除
-		$originResizePath = substr($originFilePath, 0, -1 * strlen($uploadFile['UploadFile']['real_file_name'])) .
+		$directoryPath = substr(
+			$originFilePath,
+			0,
+			-1 * strlen($uploadFile['UploadFile']['real_file_name'])
+		);
+		$originResizePath = $directoryPath .
 			$overwriteFilePrefix . $uploadFile['UploadFile']['real_file_name'];
 
 		if (! file_exists($originResizePath)) {

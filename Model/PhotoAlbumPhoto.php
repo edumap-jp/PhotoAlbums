@@ -157,7 +157,7 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
  * @param array $data CakeRequest::data
  * @return bool
  */
-	protected function __savePhotos(array $data) {
+	private function __savePhotos(array $data) {
 		$base = $data;
 
 		foreach ($data[$this->alias][self::ATTACHMENT_FIELD_NAME] as $photo) {
