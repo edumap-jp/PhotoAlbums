@@ -35,7 +35,24 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
  */
 	public $actsAs = array(
 		'NetCommons.OriginalKey',
-		'Files.Attachment' => [PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME],
+		'Files.Attachment' => [
+			PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME => [
+				'thumbnailSizes' => array(
+					'origin' => '800ml',
+					'big' => '800ml',
+					'medium' => '400ml',
+					//'small' => '152mh',
+					'small' => '120mh',
+					////'small' => '200ml',
+					'thumb' => '80x80',
+				),
+			]
+		],
+		'PhotoAlbums.OriginImageResize' => [
+			PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME => [
+				'resizeImageSizeKey' => 'origin',
+			]
+		],
 		'Workflow.Workflow',
 		'Workflow.WorkflowComment',
 		//多言語
@@ -113,6 +130,46 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 	}
 
 /**
+ * savePhotos 複数ファイル保存
+ *
+ * @param array $data CakeRequest::data
+ * @return bool
+ */
+	public function savePhotos(array $data) {
+		$this->begin();
+
+		try {
+			if (!$this->__savePhotos($data)) {
+				$this->rollback();
+				return false;
+			};
+		} catch (Exception $ex) {
+			$this->rollback($ex);
+		}
+
+		$this->commit();
+		return true;
+	}
+
+/**
+ * 複数ファイル保存のメイン処理
+ *
+ * @param array $data CakeRequest::data
+ * @return bool
+ */
+	private function __savePhotos(array $data) {
+		$base = $data;
+
+		foreach ($data[$this->alias][self::ATTACHMENT_FIELD_NAME] as $photo) {
+			$base[$this->alias][self::ATTACHMENT_FIELD_NAME] = $photo;
+			if (!$this->savePhoto($base)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+/**
  * Save photo
  *
  * @param array $data received post data
@@ -124,14 +181,10 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 
 		$regenerateData = $this->__regenerateDataForZip($data);
 
-		$photo = array();
+		foreach ($regenerateData as $datum) {
+			$this->create();
 
-		foreach ($regenerateData as $index => $data) {
-			if ($index > 0) {
-				$this->create();
-			}
-
-			$this->set($data);
+			$this->set($datum);
 			if (!$this->validates()) {
 				$this->rollback();
 				return false;
@@ -142,16 +195,16 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 				if (! $result) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
-				$photo[] = $result;
 
 			} catch (Exception $ex) {
 				$this->rollback($ex);
+				return false;
 			}
 		}
 
 		$this->commit();
 
-		return $photo;
+		return true;
 	}
 
 /**
@@ -311,7 +364,7 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 /**
  * 隠しファイル除外
  *
- * @param array $files ファイル
+ * @param array $files ファイルリスト
  * @return array
  */
 	private function __excludeHiddenFile($files) {
