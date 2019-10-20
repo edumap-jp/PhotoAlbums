@@ -31,9 +31,15 @@ class PhotoAlbumPhotoPublishTest extends NetCommonsCakeTestCase {
 		'plugin.users.user',
 		'plugin.workflow.workflow_comment',
 	);
-	private $originPermission;
 
-	/**
+/**
+ * 元のCurrentのデータ
+ *
+ * @var array
+ */
+	private $__originPermission;
+
+/**
  * setUp method
  *
  * @return void
@@ -120,7 +126,7 @@ class PhotoAlbumPhotoPublishTest extends NetCommonsCakeTestCase {
  * @return void
  */
 	private function __permissionPublishable() {
-		$this->originPermission = Current::permission('content_publishable');
+		$this->__originPermission = Current::permission('content_publishable');
 		Current::writePermission(null, 'content_publishable', true);
 	}
 
@@ -130,7 +136,7 @@ class PhotoAlbumPhotoPublishTest extends NetCommonsCakeTestCase {
  * @return void
  */
 	private function __restorePermission() {
-		Current::writePermission(null, 'content_publishable', $this->originPermission);
+		Current::writePermission(null, 'content_publishable', $this->__originPermission);
 	}
 
 }
