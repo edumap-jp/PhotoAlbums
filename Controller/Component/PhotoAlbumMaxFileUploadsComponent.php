@@ -31,7 +31,6 @@ class PhotoAlbumMaxFileUploadsComponent extends Component {
 		Configure::load('PhotoAlbums.config');
 		$this->__maxFileUploads = Configure::read('PhotoAlbums.maxFileUploads');
 		$this->__controller->set('maxFileUploads', $this->__maxFileUploads);
-
 	}
 
 /**
