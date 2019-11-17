@@ -120,12 +120,16 @@ class PhotoAlbumPhotosController extends PhotoAlbumsAppController {
 		$conditions = $this->PhotoAlbumPhoto->getWorkflowConditions();
 		$conditions['PhotoAlbumPhoto.album_key'] = $this->request->params['key'];
 
+		Configure::load('PhotoAlbums.config');
+		$slideShowLimit = Configure::read('PhotoAlbums.slideShowMaxLimit');
+
 		$this->Paginator->settings = array(
 			'PhotoAlbumPhoto' => array(
 				'sort' => $frameSetting['PhotoAlbumFrameSetting']['photos_sort'],
 				'direction' => $frameSetting['PhotoAlbumFrameSetting']['photos_direction'],
-				'limit' => $this->Paginator->settings['maxLimit'],
-				'conditions' => $conditions
+				'conditions' => $conditions,
+				'limit' => $slideShowLimit,
+				'maxLimit' => $slideShowLimit,
 			)
 		);
 		$this->set('photos', $this->Paginator->paginate('PhotoAlbumPhoto'));
