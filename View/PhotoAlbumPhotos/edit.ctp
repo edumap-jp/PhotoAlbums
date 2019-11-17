@@ -59,7 +59,9 @@
 					)
 				);
 				?>
-				<div class="has-error" id="PhotoAlbumPhotoMaxFileUploadsError" style="display:none"><div class="help-block"><?php echo $maxFileUploads ?>枚以上はアップロードできません。</div></div>
+				<div class="has-error" id="PhotoAlbumPhotoMaxFileUploadsError" style="display:none">
+					<div class="help-block"><?php echo __d('photo_albums', 'You cannot upload more than %d photos.', $maxFileUploads)?></div>
+				</div>
 
 			<?php else: ?>
 				<?php
