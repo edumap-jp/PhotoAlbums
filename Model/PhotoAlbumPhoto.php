@@ -103,6 +103,13 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 				'message' => array(__d('files', 'It is upload disabled file format'))
 			);
 			*/
+			$validate['maxFileInAlbum'] = [
+				'rule' => ['validationMaxFileInAlbum'],
+				'message' => __d(
+					'photo_albums',
+					'You have exceeded the maximum number of images that can be uploaded to this album.'
+				),
+			];
 		}
 
 		$this->validate = array_merge(
@@ -113,6 +120,24 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 		);
 
 		return parent::beforeValidate($options);
+	}
+
+/**
+ * validationMaxFileInAlbum アルバムの画像数が最大数未満かをチェック
+ *
+ * @param array $check check
+ * @return bool
+ */
+	public function validationMaxFileInAlbum(array $check) {
+		Configure::load('PhotoAlbums.config');
+		$maxFileInAlbum = Configure::read('PhotoAlbums.maxFileInAlbum');
+		$count = $this->find('count', [
+			'conditions' => [
+				'PhotoAlbumPhoto.album_key' => $this->data['PhotoAlbumPhoto']['album_key'],
+				'PhotoAlbumPhoto.is_latest' => true,
+			]
+		]);
+		return ($count < $maxFileInAlbum);
 	}
 
 /**

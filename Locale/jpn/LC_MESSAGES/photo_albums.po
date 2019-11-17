@@ -204,3 +204,6 @@ msgstr "「0」を指定すると自動になります"
 
 msgid "You cannot upload more than %d photos."
 msgstr "%dを超える写真をアップロードすることはできません。"
+
+msgid "You have exceeded the maximum number of images that can be uploaded to this album."
+msgstr "このアルバムにアップロードできる最大画像数を超えています。"
