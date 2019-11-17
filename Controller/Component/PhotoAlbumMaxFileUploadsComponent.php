@@ -35,17 +35,15 @@ class PhotoAlbumMaxFileUploadsComponent extends Component {
 	}
 
 /**
- * $request->data['PhotoAlbumPhoto']['photo']を__maxFileUploadsまでに制限する
+ * 写真追加、アルバム追加時にアップロードされるファイル数を__maxFileUploadsまでに制限する
  *
  * 超えたファイル情報は切り捨てる
  *
- * @param string $requestPath photoの配列パス
+ * @param string $photoPathInData photoの配列パス
  * @return void
  */
-	public function removeOverMaxFileUploads(string $requestPath) {
-		//// 写真の追加時はPhotoAlbumPhoto.photoが配列になる
-		//// アルバムの追加時はPhotoAlbumPhotoが配列
-		$photo = Hash::get($this->__controller->request->data, $requestPath);
+	public function removeOverMaxFileUploads(string $photoPathInData) {
+		$photo = Hash::get($this->__controller->request->data, $photoPathInData);
 
 		if (!is_array($photo)) {
 			return;
@@ -56,7 +54,11 @@ class PhotoAlbumMaxFileUploadsComponent extends Component {
 		}
 
 		$photo = array_slice($photo, 0, $this->__maxFileUploads);
-		$this->__controller->request->data = Hash::insert($this->__controller->request->data, $requestPath, $photo);
+		$this->__controller->request->data = Hash::insert(
+			$this->__controller->request->data,
+			$photoPathInData,
+			$photo
+		);
 	}
 
 }
