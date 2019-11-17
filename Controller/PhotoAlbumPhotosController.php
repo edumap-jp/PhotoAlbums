@@ -71,6 +71,11 @@ class PhotoAlbumPhotosController extends PhotoAlbumsAppController {
 	);
 
 /**
+ * @var int 同時にアップロードできる最大ファイル数
+ */
+	private $__maxFileUploads;
+
+/**
  * beforeFilter
  *
  * @return void
@@ -78,6 +83,10 @@ class PhotoAlbumPhotosController extends PhotoAlbumsAppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->allow('photo', 'slide');
+
+		Configure::load('PhotoAlbums.config');
+		$this->__maxFileUploads = Configure::read('PhotoAlbums.maxFileUploads');
+		$this->set('maxFileUploads', $this->__maxFileUploads);
 	}
 
 /**
@@ -160,6 +169,7 @@ class PhotoAlbumPhotosController extends PhotoAlbumsAppController {
 		$photo = $this->PhotoAlbumPhoto->create();
 		if ($this->request->is('post')) {
 			$this->request->data['PhotoAlbumPhoto']['status'] = $this->Workflow->parseStatus();
+			$this->__removeOverMaxFileUploads();
 			if ($this->PhotoAlbumPhoto->savePhotos($this->request->data)) {
 				$url = PhotoAlbumsSettingUtility::settingUrl(
 					array(
@@ -343,5 +353,25 @@ class PhotoAlbumPhotosController extends PhotoAlbumsAppController {
 			)
 		);
 		$this->redirect($url);
+	}
+
+/**
+ * $this->request->data['PhotoAlbumPhoto']['photo']を__maxFileUploadsまでに制限する
+ *
+ * 超えたファイル情報は切り捨てる
+ *
+ * @return void
+ */
+	private function __removeOverMaxFileUploads() {
+		if (!isset($this->request->data['PhotoAlbumPhoto']['photo'])) {
+			return;
+		}
+		$photo = $this->request->data['PhotoAlbumPhoto']['photo'];
+
+		if (count($photo) <= $this->__maxFileUploads) {
+			return;
+		}
+
+		$this->request->data['PhotoAlbumPhoto']['photo'] = array_slice($photo, 0, $this->__maxFileUploads);
 	}
 }
