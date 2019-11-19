@@ -14,7 +14,7 @@ class PhotoAlbumMaxFileUploadsComponent extends Component {
 	private $__maxFileUploads;
 
 /**
- * @var Controller
+ * @var Controller 呼び出し元コントローラ
  */
 	private $__controller;
 
