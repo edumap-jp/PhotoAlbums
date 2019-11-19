@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 同時にアップロードできるファイル数を制限する
  */
 
 /**
@@ -41,7 +41,7 @@ class PhotoAlbumMaxFileUploadsComponent extends Component {
  * @param string $photoPathInData photoの配列パス
  * @return void
  */
-	public function removeOverMaxFileUploads(string $photoPathInData) {
+	public function removeOverMaxFileUploads($photoPathInData) {
 		$photo = Hash::get($this->__controller->request->data, $photoPathInData);
 
 		if (!is_array($photo)) {
