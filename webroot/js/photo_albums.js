@@ -86,11 +86,20 @@ NetCommonsApp.controller('PhotoAlbumsPreviewController', ['$scope',
     $scope.fileReaderResultsCount = 0;
     $scope.selectedJacket = {};
 
+    $scope.init = function(maxFileUploads) {
+      $scope.maxFileUploads = maxFileUploads;
+    };
+
     $scope.preview = function() {
       $scope.fileReaderResults = {};
       $scope.selectedJacket = {};
 
+      var fileCount = 0;
       angular.forEach($scope.files, function(file, index) {
+        fileCount++;
+        if (fileCount > $scope.maxFileUploads) {
+          return;
+        }
         if (!file.type.match('image/*')) {
           return;
         }

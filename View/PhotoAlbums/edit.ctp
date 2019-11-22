@@ -11,6 +11,9 @@
 
 <?php echo $this->NetCommonsHtml->css('/photo_albums/css/photo_albums.css'); ?>
 <?php echo $this->NetCommonsHtml->script('/photo_albums/js/photo_albums.js'); ?>
+<?php
+echo $this->NetCommonsHtml->script('/photo_albums/js/photo_album_photo_edit.js');
+?>
 
 <div class="panel panel-default">
 	<?php echo $this->NetCommonsForm->create('PhotoAlbum', array('type' => 'file')); ?>

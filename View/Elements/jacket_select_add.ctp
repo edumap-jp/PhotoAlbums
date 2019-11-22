@@ -7,9 +7,13 @@
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
  */
+
+/**
+ * @var int $maxFileUploads 一度にアップロードできるファイル数
+ */
 ?>
 
-<div ng-controller="PhotoAlbumsPreviewController">
+<div ng-controller="PhotoAlbumsPreviewController" ng-init="init(<?php echo $maxFileUploads ?>)">
 	<?php
 		App::uses('PhotoAlbumPhoto', 'PhotoAlbums.Model');
 		$this->Form->unlockField('PhotoAlbumPhoto..' . PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME);
@@ -23,8 +27,16 @@
 				'required' => true,
 				'multiple',
 				'nc-photo-albums-preview' => 'preview()',
+				'onChange' => 'photoAlbumValidateUploadFileCount(this)',
+				'data-max-file-uploads' => $maxFileUploads,
 			)
 		);
+	?>
+	<div class="has-error" id="PhotoAlbumPhotoMaxFileUploadsError" style="display:none">
+		<div class="help-block"><?php echo __d('photo_albums', 'You cannot upload more than %d photos.', $maxFileUploads)?></div>
+	</div>
+
+	<?php
 		echo $this->NetCommonsForm->hidden(
 			'PhotoAlbum.selectedJacketIndex',
 			array('ng-value' => 'selectedJacket.index')

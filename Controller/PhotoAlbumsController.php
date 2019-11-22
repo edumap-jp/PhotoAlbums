@@ -56,6 +56,7 @@ class PhotoAlbumsController extends PhotoAlbumsAppController {
 		'Workflow.Workflow',
 		'Files.Download',
 		'PhotoAlbums.PhotoAlbums',
+		'PhotoAlbums.PhotoAlbumMaxFileUploads',
 	);
 
 /**
@@ -217,6 +218,8 @@ class PhotoAlbumsController extends PhotoAlbumsAppController {
 
 		$album = $this->PhotoAlbum->create();
 		if ($this->request->is('post')) {
+			$this->PhotoAlbumMaxFileUploads->removeOverMaxFileUploads('PhotoAlbumPhoto');
+
 			$this->request->data['PhotoAlbum']['status'] = $this->Workflow->parseStatus();
 			$album = $this->PhotoAlbum->saveAlbumForAdd($this->request->data);
 			if ($album) {

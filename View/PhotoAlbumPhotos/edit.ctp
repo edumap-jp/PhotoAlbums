@@ -7,6 +7,7 @@
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
  */
+
 ?>
 
 <?php $this->assign('title_for_modal', __d('photo_albums', 'Add photo')); ?>
@@ -39,8 +40,8 @@
 			<?php echo $this->NetCommonsForm->hidden('block_id'); ?>
 			<?php echo $this->NetCommonsForm->hidden('status'); ?>
 
-			<?php
-			if (!empty($isAdd)) {
+			<?php if (!empty($isAdd)): ?>
+				<?php
 				$this->Form->unlockField(
 					'PhotoAlbumPhoto.' . PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME
 				);
@@ -52,9 +53,18 @@
 						'required' => true,
 						'multiple',
 						'name' => 'data[PhotoAlbumPhoto][photo][]',
+
+						'onChange' => 'photoAlbumValidateUploadFileCount(this)',
+						'data-max-file-uploads' => $maxFileUploads,
 					)
 				);
-			} else {
+				?>
+				<div class="has-error" id="PhotoAlbumPhotoMaxFileUploadsError" style="display:none">
+					<div class="help-block"><?php echo __d('photo_albums', 'You cannot upload more than %d photos.', $maxFileUploads)?></div>
+				</div>
+
+			<?php else: ?>
+				<?php
 				echo $this->NetCommonsForm->uploadFile(
 					PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME,
 					array(
@@ -62,9 +72,8 @@
 						'remove' => false
 					)
 				);
-			}
-
-			?>
+				?>
+			<?php endif ?>
 
 			<?php
 				echo $this->NetCommonsForm->input(
