@@ -9,6 +9,9 @@
  */
 
 ?>
+<?php
+echo $this->NetCommonsHtml->script('/photo_albums/js/photo_album_photo_edit.js');
+?>
 
 <?php $this->assign('title_for_modal', __d('photo_albums', 'Add photo')); ?>
 
