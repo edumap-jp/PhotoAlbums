@@ -52,7 +52,7 @@ echo $this->NetCommonsHtml->script('/photo_albums/js/photo_album_photo_edit.js')
 			<?php echo $this->Workflow->inputComment('PhotoAlbum.status'); ?>
 		</div>
 
-		<?php echo $this->Workflow->buttons('PhotoAlbum.status', $this->request->referer()); ?>
+		<?php echo $this->Workflow->buttons('PhotoAlbum.status', $this->request->referer(true)); ?>
 	<?php echo $this->NetCommonsForm->end(); ?>
 
 	<?php if ($this->request->params['action'] === 'edit' && $this->Workflow->canDelete('PhotoAlbum', $this->request->data)) : ?>
