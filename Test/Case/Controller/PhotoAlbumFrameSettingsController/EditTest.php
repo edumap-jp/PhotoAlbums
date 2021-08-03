@@ -110,7 +110,7 @@ class PhotoAlbumFrameSettingsControllerEditTest extends FrameSettingsControllerT
 		TestAuthGeneral::login($this);
 
 		$frameId = '6';
-		if ($validationError) {
+		if (is_array($validationError)) {
 			$data = Hash::insert($data, $validationError['field'], $validationError['value']);
 		}
 
