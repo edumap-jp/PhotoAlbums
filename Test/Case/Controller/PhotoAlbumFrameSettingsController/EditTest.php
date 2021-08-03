@@ -148,7 +148,7 @@ class PhotoAlbumFrameSettingsControllerEditTest extends FrameSettingsControllerT
 		);
 
 		//バリデーションエラー(エラー表示あり)
-		if ($validationError) {
+		if (is_array($validationError)) {
 			if ($validationError['message']) {
 				array_push($asserts, array(
 						'method' => 'assertNotEmpty', 'value' => $this->controller->validationErrors
