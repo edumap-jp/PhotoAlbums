@@ -128,9 +128,8 @@ class PhotoAlbum extends PhotoAlbumsAppModel {
 		$photoCount = [];
 		foreach ($countArr as $result) {
 			$result = $result['PhotoAlbumPhoto'];
-			$photoCount[$result['album_key']] = [
-				$result['status'] => $result['photo_count']
-			];
+			$photoCount[$result['album_key']][$result['status']] = $result['photo_count'];
+
 		}
 
 		foreach ($results as $index => $result) {
