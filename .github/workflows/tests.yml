@@ -155,7 +155,7 @@ jobs:
 
   teardown:
     name: teardown
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     needs: tests
     steps:
       # テスト成功時はこちらのステップが実行される
