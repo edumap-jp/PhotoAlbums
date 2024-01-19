@@ -81,7 +81,7 @@ $srcPrefix = $this->Html->url(
 			<div
 				class="photo-albums-slide-photo"
 				style="
-					background-image:url('<?php echo $srcPrefix . $photo['PhotoAlbumPhoto']['id']; ?>/big');
+					background-image:url('<?php echo $srcPrefix . $photo['PhotoAlbumPhoto']['id']; ?>/medium');
 					<?php
 						if ($frameSetting['PhotoAlbumFrameSetting']['display_type'] == PhotoAlbumFrameSetting::DISPLAY_TYPE_SLIDE &&
 							isset($frameSetting['PhotoAlbumFrameSetting']['slide_height'])

@@ -38,8 +38,8 @@ class PhotoAlbumPhoto extends PhotoAlbumsAppModel {
 		'Files.Attachment' => [
 			PhotoAlbumPhoto::ATTACHMENT_FIELD_NAME => [
 				'thumbnailSizes' => array(
-					'origin' => '800ml',
-					'big' => '800ml',
+					'origin' => '400ml',
+					'big' => '400ml',
 					'medium' => '400ml',
 					//'small' => '152mh',
 					'small' => '120mh',
